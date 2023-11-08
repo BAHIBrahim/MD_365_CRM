@@ -1,0 +1,75 @@
+<div class="layout-topbar">
+    <a class="layout-topbar-logo" routerLink="">
+        <img src="assets/images/dynamics-365-logo-trans.png" alt="logo" />
+        <span>MD-365 Sales</span>
+    </a>
+
+    <button
+        #menubutton
+        class="p-link layout-menu-button layout-topbar-button"
+        (click)="layoutService.onMenuToggle()"
+    >
+        <i class="pi pi-bars"></i>
+    </button>
+
+    <button
+        #topbarmenubutton
+        class="p-link layout-topbar-menu-button layout-topbar-button"
+        (click)="layoutService.showProfileSidebar()"
+    >
+        <i class="pi pi-ellipsis-v"></i>
+    </button>
+
+    <div
+        #topbarmenu
+        class="layout-topbar-menu"
+        [ngClass]="{
+            'layout-topbar-menu-mobile-active':
+                layoutService.state.profileSidebarVisible
+        }"
+    >
+        <button
+            *ngIf="displayInstall"
+            class="p-link layout-topbar-button add-to-btn"
+            (click)="installApp()"
+        >
+            <i class="pi pi-download"></i>
+            <span>Install App</span>
+        </button>
+        <button
+            class="p-link layout-topbar-button add-to-btn"
+            (click)="confirmSynchronization()"
+        >
+            <i class="pi pi-sync"></i>
+            <span>Synchronize</span>
+        </button>
+        <button class="p-link layout-topbar-button" routerLink="user-settings">
+            <i class="pi pi-user"></i>
+            <span>Profile</span>
+        </button>
+        <button
+            class="p-link layout-topbar-button"
+            (click)="signOut()"
+            [routerLink]=""
+        >
+            <i class="pi pi-sign-out"></i>
+            <span>Sign out</span>
+        </button>
+    </div>
+</div>
+
+<p-toast></p-toast>
+<p-confirmDialog [style]="{ width: '50vw' }"></p-confirmDialog>
+<p-blockUI [blocked]="isSynchronizing">
+    <p-dialog header="Synchronization is in progress ..." [closable]="syncComplete" [(visible)]="isSynchronizing" [modal]="true" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+        <div class="flex w-full px-4">
+          <div class="flex flex-column w-full gap-5">
+            <div *ngFor="let item of syncItems" class="flex flex-row w-full gap-3">
+              <i class="pi" [class]="item.icon" [style.color]="item.color"></i>
+              <div>{{ item.message }}</div>
+            </div>
+          </div>
+        </div>
+      </p-dialog>
+</p-blockUI>
+
